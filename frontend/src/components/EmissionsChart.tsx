@@ -1,29 +1,36 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+
+// Register required components with Chart.js
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 interface EmissionsChartProps {
-  data: Array<{ country: string; data: Array<{ year: string; emissions: number }> }>;
+  chartData: any;
 }
 
-const EmissionsChart: React.FC<EmissionsChartProps> = ({ data }) => {
-  // Flatten data for use in the chart
-  const chartData = data.flatMap(country =>
-    country.data.map(entry => ({ ...entry, country: country.country }))
-  );
-
+const EmissionsChart: React.FC<EmissionsChartProps> = ({ chartData }) => {
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      <LineChart data={chartData}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="year" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        {data.map(country => (
-          <Line type="monotone" dataKey="emissions" data={country.data} key={country.country} name={country.country} />
-        ))}
-      </LineChart>
-    </ResponsiveContainer>
+    <div>
+      <Line data={chartData} />
+    </div>
   );
 };
 
